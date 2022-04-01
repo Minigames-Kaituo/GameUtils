@@ -1,0 +1,15 @@
+api-version: 1.13
+name: GameUtils
+main: fun.kaituo.GameUtils
+version: 1.1.1
+authors: [YFshadaow, LeChocolatChaud]
+commands:
+  changebiome:
+    description: ChangBiome
+    default: op
+    aliases: [cb]
+  changegame:
+    description: changeGame
+    default: op
+  rejoin:
+    description: rejoin game

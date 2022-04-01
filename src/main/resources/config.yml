@@ -1,0 +1,17 @@
+change-biome-settings:
+  default: badlands
+  sand: desert
+  grass_block: forest
+  oak_log: forest
+  spruce_log: forest
+  jungle_log: forest
+  birch_log: forest
+  oak_leaves: forest
+  spruce_leaves: forest
+  jungle_leaves: forest
+  birch_leaves: forest
+  dirt: forest
+  gravel: forest
+  podzol: forest
+  barrier: forest
+  snow: snowy_slopes
