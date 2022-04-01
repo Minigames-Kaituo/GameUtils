@@ -49,11 +49,9 @@ public abstract class Game {
         this.hubLocation = hubLocation;
         this.gameBoundingBox = gameBoundingBox;
         this.gameUUID = UUID.randomUUID();
+        initializeGameRunnable();
     }
 
-    protected void initializeGameRunnable(BukkitRunnable bukkitRunnable) {
-        this.gameRunnable = bukkitRunnable;
-    }
 
     protected void initializeButtons(Location startButtonLocation, BlockFace startButtonDirection, Location spectateButtonLocation, BlockFace spectateButtonDirection) {
         this.startButtonLocation = startButtonLocation;
@@ -61,6 +59,7 @@ public abstract class Game {
         this.spectateButtonLocation = spectateButtonLocation;
         this.spectateButtonDirection = spectateButtonDirection;
     }
+
 
     //For game utilities
     public void startGame() {
@@ -169,6 +168,8 @@ public abstract class Game {
     }
 
     //For per-game override usage
+    protected abstract void initializeGameRunnable();
+
     protected abstract void savePlayerQuitData(Player p) throws IOException;
 
     protected abstract void rejoin(Player p);
