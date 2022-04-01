@@ -46,7 +46,7 @@ jobs:
           pftp -inv "$FTP_SERVER" "$FTP_PORT" <<EOF
           user "$FTP_USERNAME" "$FTP_PASSWORD"
           binary
-          put target/"$ARTIFACT_ID"-"$PROJECT_VERSION".jar "$ARTIFACT_NAME".jar
+          put target/"$ARTIFACT_ID"-"$PROJECT_VERSION".jar "$ARTIFACT_ID".jar
           close
           bye
           EOF
