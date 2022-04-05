@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ import static fun.kaituo.GameUtils.getGamePlayerIsIn;
 public class GameUtilsListener implements Listener {
     GameUtils plugin;
     ItemStack menu;
+    FileConfiguration c;
 
     public GameUtilsListener(GameUtils plugin) {
         this.plugin = plugin;
@@ -41,6 +43,7 @@ public class GameUtilsListener implements Listener {
         itemMeta.setDisplayName("§e● §b§l菜单 §e●");
         itemMeta.setLore(List.of("§f请右键打开!"));
         menu.setItemMeta(itemMeta);
+        c=plugin.getConfig();
     }
     //Chat is now handled by trchat
     /*
@@ -122,6 +125,9 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void preventFireworkDamage(EntityDamageByEntityEvent edbee) {
+        if (!c.getBoolean("no-firework-damage")) {
+            return;
+        }
         if (edbee.getDamager() instanceof Firework && edbee.getEntity() instanceof Player) {
             if (edbee.getDamager().getScoreboardTags().contains("gameFirework")) {
                 edbee.setCancelled(true);
@@ -131,6 +137,9 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void preventDroppingMenu(PlayerDropItemEvent pdie) {
+        if (!c.getBoolean("no-drop-menu")) {
+            return;
+        }
         if (pdie.getItemDrop().getItemStack().getItemMeta().getDisplayName().equals("§e● §b§l菜单 §e●")) {
             pdie.setCancelled(true);
         }
@@ -138,6 +147,9 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void preventDestroyingPainting(HangingBreakByEntityEvent hbbee) {
+        if (!c.getBoolean("no-destroy-painting")) {
+            return;
+        }
         if (!(hbbee.getRemover() instanceof Player)) {
             return;
         }
@@ -148,6 +160,9 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void preventManipulatingArmorStand(PlayerArmorStandManipulateEvent pasme) {
+        if (!c.getBoolean("no-armourstand-manipulation")) {
+            return;
+        }
         if (pasme.getPlayer().getGameMode().equals(GameMode.ADVENTURE)) {
             pasme.setCancelled(true);
         }
@@ -155,6 +170,9 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void preventBlockInteraction(PlayerInteractEvent pie) {
+        if (!c.getBoolean("no-block-interaction")) {
+            return;
+        }
         if (pie.getClickedBlock() == null) {
             return;
         }
@@ -174,6 +192,9 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void setStandInvulnerable(EntitySpawnEvent ese) {
+        if (!c.getBoolean("invulnerable-armourstand-on-spawn")) {
+            return;
+        }
         if (ese.getEntity().getType().equals(EntityType.ARMOR_STAND)) {
             ese.getEntity().setInvulnerable(true);
         }
@@ -181,11 +202,17 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void setPaintingInvulnerable(HangingPlaceEvent hpe) {
+        if (!c.getBoolean("invulnerable-painting-on-spawn")) {
+            return;
+        }
         hpe.getEntity().setInvulnerable(true);
     }
 
     @EventHandler
     public void cancelSpawn(CreatureSpawnEvent cse) { //防止鸡蛋生成鸡
+        if (!c.getBoolean("no-chicken-from-egg")) {
+            return;
+        }
         if (cse.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.EGG)) {
             cse.setCancelled(true);
         }
@@ -193,6 +220,9 @@ public class GameUtilsListener implements Listener {
 
     @EventHandler
     public void preventSnowFormation(BlockFormEvent bfe) {
+        if (!c.getBoolean("no-snow-and-ice-formation")) {
+            return;
+        }
         if (bfe.getNewState().getType().equals(Material.SNOW) || bfe.getNewState().getType().equals(Material.ICE)) {
             bfe.setCancelled(true);
         }
