@@ -120,8 +120,10 @@ public class GameUtilsListener implements Listener {
     public void fixRespawn(PlayerJoinEvent pje) {
         Player p = pje.getPlayer();
         resetPlayer(p);
-        p.setBedSpawnLocation(new Location(Bukkit.getWorld("world"), 0.5, 89, 0.5, 0, 0), true);
-        p.teleport(new Location(Bukkit.getWorld("world"), 0.5, 89, 0.5, 0, 0));
+        if (!p.getGameMode().equals(GameMode.CREATIVE)) {
+            p.setBedSpawnLocation(new Location(Bukkit.getWorld("world"), 0.5, 89, 0.5, 0, 0), true);
+            p.teleport(new Location(Bukkit.getWorld("world"), 0.5, 89, 0.5, 0, 0));
+        }
     }
 
     @EventHandler
