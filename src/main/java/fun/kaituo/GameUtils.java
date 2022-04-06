@@ -21,11 +21,13 @@ public class GameUtils extends JavaPlugin implements Listener {
     //For global game utilities
     public static void registerGame(Game game) {
         gameBoundingBoxHashMap.put(game, game.gameBoundingBox);
+        Bukkit.broadcastMessage("Registered game " + game.name + " with boundingbox " + game.gameBoundingBox.toString());
         gameNameHashMap.put(game, game.getName());
     }
 
     public static void unregisterGame(Game game) {
         gameBoundingBoxHashMap.remove(game);
+        Bukkit.broadcastMessage("Unregistered game " + game.name + " with boundingbox " + game.gameBoundingBox.toString());
         gameNameHashMap.remove(game);
     }
 
