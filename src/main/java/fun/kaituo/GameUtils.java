@@ -34,7 +34,6 @@ public class GameUtils extends JavaPlugin implements Listener {
             return getGameByName("UHC");
         }
         for (Map.Entry<Game, BoundingBox> entry : gameBoundingBoxHashMap.entrySet()) {
-            Bukkit.broadcastMessage("§bName §f" + entry.getKey().name + " §bBoundingbox §f" + entry.getValue().toString());
             if (entry.getValue().contains(p.getLocation().toVector())) {
                 return entry.getKey();
             }
