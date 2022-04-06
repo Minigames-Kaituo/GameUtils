@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
@@ -233,6 +234,21 @@ public class GameUtilsListener implements Listener {
         Game game = getGamePlayerIsIn(pqe.getPlayer());
         if (game != null) {
             game.savePlayerQuitData(pqe.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent ede) {
+        if (!c.getBoolean("parkour-no-fall-damage")) {
+            return;
+        }
+        if (ede.getEntity() instanceof Player) {
+            Location l = ede.getEntity().getLocation();
+            if (ede.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+                if (l.getX() > -500 && l.getX() < 500 && l.getZ() > -500 && l.getZ() < 500) {
+                    ede.setCancelled(true);
+                }
+            }
         }
     }
 }
