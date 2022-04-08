@@ -88,6 +88,7 @@ public class GameUtils extends JavaPlugin implements Listener {
         getCommand("changegame").setExecutor(executor);
         getCommand("changegame").setTabCompleter(tabCompleter);
         getCommand("rejoin").setExecutor(executor);
+        getCommand("placestand").setExecutor(executor);
         Bukkit.getPluginManager().registerEvents(new GameUtilsListener(this), this);
     }
 

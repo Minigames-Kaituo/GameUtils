@@ -175,42 +175,38 @@ public class GameUtilsCommandExecutor implements CommandExecutor {
                 sender.sendMessage("§c你没有权限执行这个指令！");
                 return true;
             }
-            if (args.length != 1) {
-                sender.sendMessage("§c指令格式错误！");
-            } else {
-                RayTraceResult result = ((Player) sender).rayTraceBlocks(5, FluidCollisionMode.NEVER);
-                if (result != null) {
-                    Block b = result.getHitBlock();
-                    if (b != null) {
-                        if (b.getType().equals(Material.OAK_BUTTON)) {
-                            Location l = b.getLocation().clone();
-                            l.setX(l.getX() + 0.5);
-                            l.setY(l.getY() - 1);
-                            l.setZ(l.getZ() + 0.5);
-                            switch (((Directional)b.getBlockData()).getFacing()) {
-                                case NORTH -> l.setZ(l.getZ() + 0.2);
-                                case SOUTH -> l.setZ(l.getZ() - 0.2);
-                                case EAST -> l.setX(l.getX() - 0.2);
-                                case WEST -> l.setX(l.getX() + 0.2);
-                                case UP, DOWN -> {
-                                    sender.sendMessage("§c按钮方向不可为向上或向下！");
-                                    return true;
-                                }
+            RayTraceResult result = ((Player) sender).rayTraceBlocks(5, FluidCollisionMode.NEVER);
+            if (result != null) {
+                Block b = result.getHitBlock();
+                if (b != null) {
+                    if (b.getType().equals(Material.OAK_BUTTON)) {
+                        Location l = b.getLocation().clone();
+                        l.setX(l.getX() + 0.5);
+                        l.setY(l.getY() - 1);
+                        l.setZ(l.getZ() + 0.5);
+                        switch (((Directional)b.getBlockData()).getFacing()) {
+                            case NORTH -> l.setZ(l.getZ() + 0.2);
+                            case SOUTH -> l.setZ(l.getZ() - 0.2);
+                            case EAST -> l.setX(l.getX() - 0.2);
+                            case WEST -> l.setX(l.getX() + 0.2);
+                            case UP, DOWN -> {
+                                sender.sendMessage("§c按钮方向不可为向上或向下！");
+                                return true;
                             }
-                            ArmorStand stand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(l, EntityType.ARMOR_STAND);
-                            stand.setInvisible(true);
-                            stand.setCustomName("开始游戏");
-                            stand.setGravity(false);
-                            stand.setInvulnerable(true);
-                        } else {
-                            sender.sendMessage("§c请面对橡木按钮！");
                         }
+                        ArmorStand stand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(l, EntityType.ARMOR_STAND);
+                        stand.setInvisible(true);
+                        stand.setCustomName("开始游戏");
+                        stand.setGravity(false);
+                        stand.setInvulnerable(true);
                     } else {
                         sender.sendMessage("§c请面对橡木按钮！");
                     }
                 } else {
                     sender.sendMessage("§c请面对橡木按钮！");
                 }
+            } else {
+                sender.sendMessage("§c请面对橡木按钮！");
             }
             return true;
         }else {
