@@ -11,5 +11,9 @@ commands:
   changegame:
     description: changeGame
     default: op
+  placestand:
+    description: place stand
+    default: op
+    aliases: [ps]
   rejoin:
     description: rejoin game
