@@ -131,7 +131,7 @@ public class GameUtilsListener implements Listener {
         if (!c.getBoolean("no-firework-damage")) {
             return;
         }
-        if (edbee.getDamager() instanceof Firework && edbee.getEntity() instanceof Player) {
+        if (edbee.getDamager() instanceof Firework) {
             if (edbee.getDamager().getScoreboardTags().contains("gameFirework")) {
                 edbee.setCancelled(true);
             }
