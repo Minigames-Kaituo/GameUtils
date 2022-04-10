@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -168,6 +169,16 @@ public class GameUtilsListener implements Listener {
         }
         if (pasme.getPlayer().getGameMode().equals(GameMode.ADVENTURE)) {
             pasme.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void preventItemFrameRotation(PlayerInteractEntityEvent piee) {
+        if (!c.getBoolean("no-item-frame-rotation")) {
+            return;
+        }
+        if (!piee.getPlayer().getGameMode().equals(GameMode.CREATIVE) && (piee.getRightClicked() instanceof ItemFrame)) {
+            piee.setCancelled(true);
         }
     }
 

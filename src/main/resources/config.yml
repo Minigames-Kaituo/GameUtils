@@ -28,3 +28,4 @@ invulnerable-painting-on-spawn: true
 no-chicken-from-egg: true
 no-snow-and-ice-formation: true
 parkour-no-fall-damage: true
+no-item-frame-rotation: true
