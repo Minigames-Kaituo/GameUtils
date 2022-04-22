@@ -77,23 +77,27 @@ public class GameUtilsListener implements Listener {
     private void resetPlayer(Player p) {
         if (!p.getGameMode().equals(GameMode.CREATIVE)) {
             p.setGameMode(GameMode.ADVENTURE);
-            p.resetMaxHealth();
-            p.setHealth(20);
-            p.setLevel(0);
             p.getInventory().clear();
-            for (PotionEffect effect : p.getActivePotionEffects())
-                p.removePotionEffect(effect.getType());
             p.getInventory().setItem(0, menu);
-            p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-            for (Team team : Bukkit.getScoreboardManager().getMainScoreboard().getTeams()) {
-                team.removePlayer(p);
+            for (PotionEffect effect : p.getActivePotionEffects()) {
+                p.removePotionEffect(effect.getType());
             }
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 1, 0, false, false));
-            p.setInvisible(true);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                p.setInvisible(false);
-            }, 1);
         }
+        p.resetPlayerTime();
+        p.resetPlayerWeather();
+        p.setMaximumNoDamageTicks(20);
+        p.resetMaxHealth();
+        p.setHealth(20);
+        p.setLevel(0);
+        p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        for (Team team : Bukkit.getScoreboardManager().getMainScoreboard().getTeams()) {
+            team.removePlayer(p);
+        }
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 1, 0, false, false));
+        p.setInvisible(true);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            p.setInvisible(false);
+        }, 1);
     }
 
 
