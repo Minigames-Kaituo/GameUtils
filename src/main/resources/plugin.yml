@@ -17,3 +17,8 @@ commands:
     aliases: [ps]
   rejoin:
     description: rejoin game
+    default: true
+  rotatable:
+    description: set item frame rotatable
+    default: true
+    aliases: [rt]

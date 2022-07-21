@@ -11,8 +11,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.RayTraceResult;
+
+import java.util.List;
+
+import static fun.kaituo.GameUtils.world;
 
 public class GameUtilsCommandExecutor implements CommandExecutor {
     GameUtils plugin;
@@ -175,7 +182,7 @@ public class GameUtilsCommandExecutor implements CommandExecutor {
                 sender.sendMessage("§c你没有权限执行这个指令！");
                 return true;
             }
-            RayTraceResult result = ((Player) sender).rayTraceBlocks(5, FluidCollisionMode.NEVER);
+            RayTraceResult result = ((Player)sender).rayTraceBlocks(5, FluidCollisionMode.NEVER);
             if (result != null) {
                 Block b = result.getHitBlock();
                 if (b != null) {
@@ -194,7 +201,7 @@ public class GameUtilsCommandExecutor implements CommandExecutor {
                                 return true;
                             }
                         }
-                        ArmorStand stand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(l, EntityType.ARMOR_STAND);
+                        ArmorStand stand = (ArmorStand)Bukkit.getWorld("world").spawnEntity(l, EntityType.ARMOR_STAND);
                         stand.setInvisible(true);
                         stand.setCustomName("开始游戏");
                         stand.setGravity(false);
@@ -209,7 +216,52 @@ public class GameUtilsCommandExecutor implements CommandExecutor {
                 sender.sendMessage("§c请面对橡木按钮！");
             }
             return true;
-        }else {
+        } else if (cmd.getName().equalsIgnoreCase("rotatable")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("§c此指令必须由玩家执行！");
+                return true;
+            }
+            if (!((Player)sender).getGameMode().equals(GameMode.CREATIVE)) {
+                sender.sendMessage("§c此指令必须在创造模式下执行！");
+                return true;
+            }
+            switch (args.length) {
+                case 3:
+                    for (ItemFrame itemFrame: world.getEntitiesByClass(ItemFrame.class)) {
+                        if (itemFrame.getLocation().getBlockX() == Integer.parseInt(args[0]) && itemFrame.getLocation().getBlockY() == Integer.parseInt(args[1]) && itemFrame.getLocation().getBlockZ() == Integer.parseInt(args[2])) {
+                            List<MetadataValue> values = itemFrame.getMetadata("rotatable");
+                            if (values.size() == 0 || !values.get(0).asBoolean()) {
+                                sender.sendMessage("该物品展示框不可旋转！");
+                            } else {
+                                sender.sendMessage("该物品展示框可旋转！");
+                            }
+                            return true;
+                        }
+                    }
+                    sender.sendMessage("§c该物品展示框不存在！");
+                    return true;
+                case 4:
+                    for (ItemFrame itemFrame: world.getEntitiesByClass(ItemFrame.class)) {
+                        if (itemFrame.getLocation().getBlockX() == Integer.parseInt(args[0]) && itemFrame.getLocation().getBlockY() == Integer.parseInt(args[1]) && itemFrame.getLocation().getBlockZ() == Integer.parseInt(args[2])) {
+                            if (args[3].equals("true")) {
+                                itemFrame.setMetadata("rotatable", new FixedMetadataValue(plugin, true));
+                                sender.sendMessage("该物品展示框可旋转！");
+                            } else if (args[3].equals("false")) {
+                                itemFrame.setMetadata("rotatable", new FixedMetadataValue(plugin, false));
+                                sender.sendMessage("该物品展示框不可旋转！");
+                            } else {
+                                sender.sendMessage("§c指令格式错误！");
+                            }
+                            return true;
+                        }
+                    }
+                    sender.sendMessage("§c该物品展示框不存在！");
+                    return true;
+                default :
+                    sender.sendMessage("§c指令格式错误！");
+                    return true;
+            }
+        } else {
             return false;
         }
     }

@@ -24,6 +24,8 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -182,6 +184,10 @@ public class GameUtilsListener implements Listener {
             return;
         }
         if (!piee.getPlayer().getGameMode().equals(GameMode.CREATIVE) && (piee.getRightClicked() instanceof ItemFrame)) {
+            if (piee.getRightClicked().getMetadata("rotatable").size() > 0 &&
+                    piee.getRightClicked().getMetadata("rotatable").get(0).asBoolean()) {
+                return;
+            }
             piee.setCancelled(true);
         }
     }
@@ -219,11 +225,22 @@ public class GameUtilsListener implements Listener {
     }
 
     @EventHandler
-    public void setPaintingInvulnerable(HangingPlaceEvent hpe) {
+    public void editPaintingAndItemFrame(HangingPlaceEvent hpe) {
         if (!c.getBoolean("invulnerable-painting-on-spawn")) {
             return;
         }
-        hpe.getEntity().setInvulnerable(true);
+        switch (hpe.getEntity().getType()) {
+            case PAINTING:
+                hpe.getEntity().setInvulnerable(true);
+                break;
+            case ITEM_FRAME:
+                if (!hpe.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                    hpe.getEntity().setMetadata("rotatable", new FixedMetadataValue(plugin, true));
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @EventHandler
